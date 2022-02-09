@@ -1,0 +1,287 @@
+""" WH machine learning code"""
+
+
+
+# Load libraries
+import pandas as pd
+from pandas import read_csv
+from pandas.plotting import scatter_matrix
+from matplotlib import pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+import seaborn as sns
+import numpy as np
+
+# Load dataset
+#url = "https://raw.githubusercontent.com/jbrownlee/Datasets/master/iris.csv"
+#names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
+dataset = pd.read_excel("master_climate_data.xlsx", sheet_name = "master_db_cut")
+
+# shape
+print(dataset.shape)
+
+# head
+print(dataset.head(20))
+dataset.dtypes
+
+# descriptions
+#print(dataset.describe())
+
+"""
+# class distribution
+print(dataset.groupby('class').size())
+
+# box and whisker plots
+dataset.plot(kind='box', subplots=True, layout=(7,4), sharex=False, sharey=False)
+pyplot.show()
+
+# histograms
+fig= pyplot.figure(figsize=(20,20))
+ax = fig.gca()
+dataset.hist(ax=ax)
+pyplot.show()
+
+# scatterplots
+
+###PRECIPITATION
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.pr_1d,dataset.roff)
+pyplot.xlabel('1-day precipitation (mm)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('pr_1d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.pr_3d,dataset.roff)
+pyplot.xlabel('3-day precipitation (mm)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('pr_3d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.pr_5d,dataset.roff)
+pyplot.xlabel('5-day precipitation (mm)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('pr_5d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.pr_7d,dataset.roff)
+pyplot.xlabel('7-day precipitation (mm)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('pr_7d_vs_roff.tiff', dpi=300) 
+
+
+###TEMPERATURE
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.tav_1d,dataset.roff)
+pyplot.xlabel('1-day mean temperature (Celsius)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('tav_1d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.tav_3d,dataset.roff)
+pyplot.xlabel('3-day mean temperature (Celsius)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('tav_3d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.tav_5d,dataset.roff)
+pyplot.xlabel('5-day mean temperature (Celsius)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('tav_5d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.tav_7d,dataset.roff)
+pyplot.xlabel('7-day mean temperature (Celsius)')
+pyplot.ylabel('Discharge (cumecs)')
+pyplot.show()
+fig.savefig('tav_7d_vs_roff.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.gen,dataset.roff)
+pyplot.xlabel('Daily generation (kWh)')
+pyplot.ylabel('Discharge (cumecs)')
+axes.set_ylim(0,120)
+pyplot.show()
+fig.savefig('gen_vs_roff.tiff', dpi=300) 
+
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.flood,dataset.gen)
+pyplot.xlabel('(Non)Operation due to flood')
+pyplot.ylabel('Daily generation (kWh)')
+pyplot.show()
+fig.savefig('flood_vs_gen.tiff', dpi=300) 
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.pr_1d_tav_1d,dataset.gen)
+pyplot.xlabel('1-day precip / 1 day temp')
+pyplot.ylabel('Daily generation (kWh)')
+pyplot.show()
+fig.savefig('pr_1d_tav_1d_vs_gen.tiff', dpi=300)
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.pr_3d_tav_3d,dataset.gen)
+pyplot.xlabel('3-day precip / 3-day temp')
+pyplot.ylabel('Daily generation (kWh)')
+pyplot.show()
+fig.savefig('pr_3d_tav_3d_vs_roff.tiff', dpi=300)
+
+fig, axes = pyplot.subplots()
+pyplot.scatter(dataset.month,dataset.gen)
+pyplot.xlabel('Month')
+pyplot.ylabel('Daily generation (kWh)')
+pyplot.show()
+fig.savefig('month_vs_gen.tiff', dpi=300)
+
+
+###DOUBLE CHECK THE OBSERVATIONS FILE FOR DAYS WEHN THERE IS NO OPERATION
+# Split-out validation dataset
+array = dataset.values
+X = array[:,0:4]
+y = array[:,4]
+X_train, X_validation, Y_train, Y_validation = train_test_split(X, y, test_size=0.20, random_state=1)
+
+# Spot Check Algorithms
+models = []
+models.append(('LR', LogisticRegression(solver='liblinear', multi_class='ovr')))
+models.append(('LDA', LinearDiscriminantAnalysis()))
+models.append(('KNN', KNeighborsClassifier()))
+models.append(('CART', DecisionTreeClassifier()))
+models.append(('NB', GaussianNB()))
+models.append(('SVM', SVC(gamma='auto')))
+
+# evaluate each model in turn
+results = []
+names = []
+"""
+
+
+### GRAPHICAL ANALYSIS USING SEABORN
+# Seaborn count
+plt.figure(figsize=(12,12))
+sns.countplot(dataset['flood'])
+
+plt.subplots(figsize=(14,8))
+sns.countplot(x='month',hue='flood', data=dataset, palette='colorblind')
+
+
+### DROP UNUSED VARIABLES AND NAN'S
+dataset['HP_gen'] = dataset['gen']
+dataset= dataset.drop('gen',axis=1)
+
+dataset = dataset.drop('date',axis=1)
+dataset.dropna(inplace=True)
+
+### REMOVING THE OBSERVED RUNOFF
+dataset = dataset.drop('roff',axis=1)
+
+
+### Heatmap based on the correlation of the variables
+sns.set(font_scale=1.4)
+plt.subplots(figsize=(20,14))
+sns.heatmap(dataset.corr(), annot=True,fmt='.0%',cmap='Blues')
+
+##SETTING THE ARRAYS FOR THE EXPERIMENT
+from sklearn.preprocessing import LabelEncoder
+X = dataset.iloc[:,0:22].values
+Y = dataset.iloc[:,23].values
+Y=Y.astype('int')
+
+### RANDOM FOREST REGRESSOR
+from sklearn.model_selection import train_test_split
+X_train, X_test, Y_train, Y_test = train_test_split(X,Y,test_size=0.25,random_state=0)
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestRegressor
+# Instantiate model with 1000 decision trees, without crossvalidation
+rf = RandomForestRegressor(n_estimators = 1000, random_state = 42)
+# Train the model on training data
+rf.fit(X_train, Y_train)
+rf.score(X_train, Y_train)
+
+### with crossvalidation
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+#cv = KFold(n_splits=5,shuffle=True, random_state=1)
+result_forest = cross_val_score(rf, X_train, Y_train, cv=5)
+print('Score: %.3f' % result_forest.mean())
+
+###SETTING THE BASELINE PERFORMANCE OF THE MODEL
+from sklearn.metrics import mean_squared_error
+col_list = list(dataset.columns)
+X = dataset.iloc[:,0:22].values
+Y = dataset.iloc[:,23].values
+Y=Y.astype('int')
+
+baseline_preds = np.mean(Y_test)
+base_predictions = np.ones((len(Y_test),1))
+base_predictions = base_predictions*baseline_preds
+mse_base = mean_squared_error(Y_test,base_predictions)
+print('MSE base:',np.mean(mse_base))
+
+from sklearn.metrics import mean_squared_error
+predictions = rf.predict(X_test)## This one is from the crossvalidation one or the other one?
+mse_pred = mean_squared_error(Y_test,predictions)
+print('MSE base:',mse_base)
+print('MSE model',mse_pred)
+print('Reduction from initial error:',round(100*(1-mse_pred/mse_base),2),'%')
+
+
+###IMPORTANCE OF THE INPUT VARIABLES
+importances = list(rf.feature_importances_)
+feature_importances = [(feature, round(importance, 2)) for feature, importance in zip(col_list, importances)]# Relates both importance and variable
+feature_importances = sorted(feature_importances, key = lambda x: x[1], reverse = True) # orders the importance high to low
+[print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importances];# prints output
+
+
+
+
+
+
+
+
+"""
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+
+
+model = LinearDiscriminantAnalysis()
+cv = KFold(n_splits=5,shuffle=True, random_state=1)
+result = cross_val_score(model, X, Y, cv=cv, scoring='accuracy')
+print('Accuracy: %.3f' % result.mean())
+
+
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.model_selection import KFold
+from sklearn.model_selection import cross_val_score
+
+
+model = LinearDiscriminantAnalysis()
+cv = KFold(n_splits=5,shuffle=True, random_state=1)
+result = cross_val_score(model, X, Y, cv=cv, scoring='accuracy')
+print('Accuracy: %.3f' % result.mean())
+
+
+
+from sklearn.ensemble import RandomForestClassifier
+forest = RandomForestClassifier(n_estimators = 10, criterion = 'entropy', random_state=0)
+forest.fit(X_train, Y_train)
+forest.score(X_train, Y_train)
+"""
