@@ -1,8 +1,11 @@
 import xarray as xr 
-import rioxarray as rio 
+#import rioxarray as rio 
 import rasterio
 import rasterio.plot
 import pyproj
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import regionmask
 
 """
 # import rioxarray and shapley
@@ -22,6 +25,9 @@ clipped_raster = raster.rio.clip([geom])
 clipped_raster.rio.to_raster('clipped.tiff')
 """
 
+
+
+
 file = xr.open_dataset("C:/Users/erpasten/Documents/UEF/Hydropower/data/climate/whalley/tasmax_hadukgrid_uk_1km_day.nc")
 
 # Read the file in order to get an idea of the contents, naming and arrangement of the data
@@ -29,7 +35,27 @@ file = xr.open_dataset("C:/Users/erpasten/Documents/UEF/Hydropower/data/climate/
 file
 
 file_tasmax = file['tasmax']
-file_tasmax = file_tasmax.rio.set_spatial_dims(x_dim='projection_x_coordinate', y_dim='projection_y_coordinate')
+# Information of the variable tasmax
+print('Information of the tasmax variable:')
+file_tasmax
+print('Units:', file_tasmax.units)
+print('Latitudes:',file.variables['latitude'])
+print('Longitudes:',file.variables['longitude'])
+print('Times:',file.variables['time'])
+#print('Times units:', file.variables['time'].units)
+#file_tasmax = file_tasmax.rio.set_spatial_dims(x_dim='projection_x_coordinate', y_dim='projection_y_coordinate')
+
+
+#Shapefile
+shapefile = 'C:/Users/erpasten/Documents/UEF/Hydropower/data/gis/27029.shp'
+catchment_shape = gpd.read_file(shapefile)
+catchment_shape
+fig,ax= plt.subplots(figsize=(16,20))
+catchment_shape.plot(ax=ax)
+
+
+
+
 file_tasmax.rio.crs
 file_tasmax.rio.write_crs("epsg:27700", inplace=True)
 
